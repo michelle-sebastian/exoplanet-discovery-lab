@@ -1,0 +1,31 @@
+<svg width="480" height="480" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Textured-ish planet: radial gradient -->
+    <radialGradient id="planetGradient" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#5AB0E6"></stop>
+      <stop offset="45%" stop-color="#2D6A94"></stop>
+      <stop offset="100%" stop-color="#1B3550"></stop>
+    </radialGradient>
+
+    <!-- Very subtle highlight band -->
+    <linearGradient id="planetBand" x1="0%" y1="40%" x2="100%" y2="60%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0)"></stop>
+      <stop offset="50%" stop-color="rgba(255,255,255,0.32)"></stop>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Orbits (minimal, elegant) -->
+  <circle cx="260" cy="240" r="190" fill="none" stroke="#78AED3" stroke-width="1" opacity="0.35"></circle>
+  <circle cx="260" cy="240" r="140" fill="none" stroke="#78AED3" stroke-width="1" opacity="0.35"></circle>
+  <circle cx="260" cy="240" r="90" fill="none" stroke="#78AED3" stroke-width="1" opacity="0.35"></circle>
+
+  <!-- Planet -->
+  <circle cx="260" cy="240" r="80" fill="url(#planetGradient)"></circle>
+
+  <!-- Highlight band across planet -->
+  <ellipse cx="260" cy="240" rx="82" ry="32" fill="url(#planetBand)" opacity="0.45"></ellipse>
+
+  <!-- Tiny moon -->
+  <circle cx="360" cy="180" r="10" fill="#5AB0E6" opacity="0.9"></circle>
+</svg>
