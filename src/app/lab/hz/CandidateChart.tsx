@@ -6,6 +6,7 @@ import { getStarType } from "@/lib/star-types";
 import { useState } from "react";
 import PlanetScatter, { type Planet, type NumericPlanetField } from "@/components/PlanetScatter";
 import { AXIS_OPTIONS, TYPE_COLORS, STAR_TYPE_COLORS, getPlanetType } from "../playground/PlaygroundClient";
+import { plottableValue } from "@/lib/catalog-values";
 
 const axes = [...AXIS_OPTIONS,
   { field: "pl_masse" as const, label: "Planet mass", unit: " M⊕", scale: "log" as const },
@@ -23,7 +24,7 @@ export default function CandidateChart({ planets }: { planets: Planet[] }) {
   const router = useRouter();
   const x = axes.find(a => a.field === xField)!;
   const y = axes.find(a => a.field === yField)!;
-  const plotted = planets.filter(p => [x, y].every(axis => typeof p[axis.field] === "number" && Number.isFinite(p[axis.field]) && (axis.scale !== "log" || (p[axis.field] as number) > 0)));
+  const plotted = planets.filter(p => [x, y].every(axis => { const value = plottableValue(p, axis.field); return value !== null && (axis.scale !== "log" || value > 0); }));
   const methods = [...new Set(planets.map(p => p.discoverymethod || "Unknown"))].sort();
   const colors = color === "star" ? STAR_TYPE_COLORS : color === "type" ? TYPE_COLORS : Object.fromEntries(methods.map((m, i) => [m, palette[i % palette.length]]));
   const groupBy = color === "star" ? (p: Planet) => getStarType(p.st_teff) : color === "type" ? getPlanetType : (p: Planet) => p.discoverymethod || "Unknown";

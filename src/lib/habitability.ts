@@ -1,4 +1,5 @@
 import type { Planet } from "@/components/PlanetScatter";
+import { publishedRadius } from "@/lib/catalog-values";
 
 export interface CandidateFilters {
   minRadius: number; maxRadius: number; minFlux: number; maxFlux: number;
@@ -15,7 +16,8 @@ export function filterCandidates(planets: Planet[], filters: CandidateFilters) {
   const query = filters.query.trim().toLowerCase();
   return planets.flatMap((planet) => {
     const flux = catalogFlux(planet);
-    if (!flux || !Number.isFinite(planet.pl_rade) || planet.pl_rade < filters.minRadius || planet.pl_rade > filters.maxRadius || flux.value < filters.minFlux || flux.value > filters.maxFlux) return [];
+    const radius = publishedRadius(planet);
+    if (!flux || radius === null || radius < filters.minRadius || radius > filters.maxRadius || flux.value < filters.minFlux || flux.value > filters.maxFlux) return [];
     if (filters.maxDistance !== null && (typeof planet.sy_dist !== "number" || !Number.isFinite(planet.sy_dist) || planet.sy_dist > filters.maxDistance)) return [];
     if (filters.method !== "all" && planet.discoverymethod !== filters.method) return [];
     if (query && !`${planet.pl_name} ${planet.hostname ?? ""}`.toLowerCase().includes(query)) return [];

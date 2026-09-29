@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Planet } from "@/components/PlanetScatter";
 import MethodsBackToTop from "@/components/MethodsBackToTop";
+import { catalogMass, publishedRadius } from "@/lib/catalog-values";
 
 const exercises = [
   {
@@ -28,7 +29,7 @@ const exercises = [
     options: ["51 Peg b", "TOI-700 d", "Kepler-442 b"],
     answer: "51 Peg b",
     evidence: ["Mass", "Orbital period", "Host-star mass"],
-    explanation: "51 Peg b has a large catalog mass and an orbit of about 4.23 days, supporting a comparatively strong, quickly repeating signal. For the same planet mass and period, a lower-mass star has a larger velocity response. The other two planets have no mass value in this snapshot, so we cannot infer that their signals are weak. Inclination, eccentricity, stellar activity, brightness, and observing precision also matter. Historically, 51 Peg b was discovered by radial velocity.",
+    explanation: "51 Peg b has a large published mass and an orbit of about 4.23 days, supporting a comparatively strong, quickly repeating signal. For the same planet mass and period, a lower-mass star has a larger velocity response. The other two planets lack independently reported masses in this snapshot; model estimates are not radial-velocity measurements. We cannot infer that their signals are weak. Inclination, eccentricity, stellar activity, brightness, and observing precision also matter. Historically, 51 Peg b was discovered by radial velocity.",
   },
 ];
 const evidenceOptions = ["Radius", "Mass", "Starlight", "Orbital period", "Host-star radius", "Host-star mass"];
@@ -44,6 +45,15 @@ const properties = [
 
 function format(value: number | null | undefined, digits = 2) {
   return typeof value === "number" && Number.isFinite(value) ? value.toLocaleString(undefined, { maximumFractionDigits: digits }) : "Unknown";
+}
+
+function evidenceValue(planet: Planet, field: typeof properties[number]["field"]) {
+  if (field === "pl_rade") return publishedRadius(planet);
+  if (field === "pl_masse") {
+    const mass = catalogMass(planet);
+    return mass?.label === "Model-estimated mass" ? null : mass?.value;
+  }
+  return planet[field];
 }
 
 export default function PlanetEvidenceExercise({ planets, exercise }: { planets: Planet[]; exercise: "habitability" | "transit" | "radial-velocity" }) {
@@ -69,7 +79,7 @@ export default function PlanetEvidenceExercise({ planets, exercise }: { planets:
           <tbody>{candidates.map((planet) => <tr key={planet.pl_name} className={selected === planet.pl_name ? "bg-emerald-50" : "border-t border-slate-100"}>
             <td className="px-3 py-3"><input type="radio" name={`${exercise}-planet`} value={planet.pl_name} checked={selected === planet.pl_name} onChange={() => { setSelected(planet.pl_name); setChecked(false); }} aria-label={`Choose ${planet.pl_name}`} className="accent-emerald-700" /></td>
             <th scope="row" className="px-3 py-3 font-semibold"><button type="button" onClick={() => { setSelected(planet.pl_name); setChecked(false); }} className="text-left hover:underline">{planet.pl_name}</button></th>
-            {columns.map(property => <td key={property.field} className="px-3 py-3">{format(planet[property.field], property.field === "st_rad" ? 3 : 2)}</td>)}
+            {columns.map(property => <td key={property.field} className="px-3 py-3">{format(evidenceValue(planet, property.field), property.field === "st_rad" ? 3 : 2)}{property.field === "pl_masse" && catalogMass(planet)?.label === "Minimum mass (M sin i)" ? " (minimum)" : ""}</td>)}
           </tr>)}</tbody>
         </table>
       </div>
@@ -88,7 +98,7 @@ export default function PlanetEvidenceExercise({ planets, exercise }: { planets:
         <p className="mt-2">Most relevant properties: {mission.evidence.join(", ")}. {hasRelevantEvidence ? "You included each of them." : `Add these to your evidence: ${mission.evidence.filter(item => !evidence.includes(item)).join(", ")}.`}</p>
         <p className="mt-2 text-slate-600">This self-check evaluates the selected planet and evidence fields, not your written explanation.</p>
       </div>}
-      {checked && <details className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm"><summary className="cursor-pointer font-semibold text-teal-800">Explore the full catalog properties after your review</summary><div className="mt-3 space-y-4">{candidates.map(planet => <article key={planet.pl_name}><h4 className="font-semibold">{planet.pl_name}</h4><dl className="mt-2 flex flex-wrap gap-x-6 gap-y-2">{properties.map(property => <div key={property.field}><dt className="text-xs text-slate-500">{property.label} ({property.unit})</dt><dd>{format(planet[property.field], property.field === "st_rad" ? 3 : 2)}</dd></div>)}<div><dt className="text-xs text-slate-500">Discovery method</dt><dd>{planet.discoverymethod ?? "Unknown"}</dd></div></dl><a href={`https://exoplanetarchive.ipac.caltech.edu/overview/${encodeURIComponent(planet.pl_name)}`} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs font-semibold text-teal-800 underline">NASA Archive: {planet.pl_name} ↗</a></article>)}<p className="text-xs leading-5 text-slate-600">Unknown means the snapshot lacks a value. Check the archive for measurement uncertainties and mass provenance; some catalog values are derived rather than directly measured.</p></div></details>}
+      {checked && <details className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm"><summary className="cursor-pointer font-semibold text-teal-800">Explore the full catalog properties after your review</summary><div className="mt-3 space-y-4">{candidates.map(planet => <article key={planet.pl_name}><h4 className="font-semibold">{planet.pl_name}</h4><dl className="mt-2 flex flex-wrap gap-x-6 gap-y-2">{properties.map(property => <div key={property.field}><dt className="text-xs text-slate-500">{property.field === "pl_masse" ? catalogMass(planet)?.label ?? property.label : property.label} ({property.unit})</dt><dd>{format(evidenceValue(planet, property.field), property.field === "st_rad" ? 3 : 2)}</dd></div>)}<div><dt className="text-xs text-slate-500">Discovery method</dt><dd>{planet.discoverymethod ?? "Unknown"}</dd></div></dl><a href={`https://exoplanetarchive.ipac.caltech.edu/overview/${encodeURIComponent(planet.pl_name)}`} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs font-semibold text-teal-800 underline">NASA Archive: {planet.pl_name} ↗</a></article>)}<p className="text-xs leading-5 text-slate-600">Unknown means no independently reported value is available for this exercise. NASA-calculated radii and model-estimated masses are omitted. Check the archive for measurement uncertainties and provenance.</p></div></details>}
     <p className="border-t border-slate-200 pt-6 text-sm text-slate-600">Values come from this site&apos;s NASA Exoplanet Archive snapshot. <Link href="/lab/playground" className="font-semibold text-teal-800 underline">Open Planet Playground</Link> to compare more planets. These are instructional selections, not official target rankings.</p>
     <MethodsBackToTop />
   </section>;

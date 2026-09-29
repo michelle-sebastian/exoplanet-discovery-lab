@@ -1,6 +1,6 @@
 # Exoplanet Explorer
 
-An educational Next.js site for exploring confirmed exoplanets, detection methods, discovery history, and habitability questions. Planet measurements come from the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/) `pscomppars` table. The site uses a dated, validated snapshot; it does not query NASA during a visitor's page load.
+An educational Next.js site for exploring confirmed exoplanets, detection methods, discovery history, and habitability questions. Planet measurements come from the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/) `pscomppars` table. The site uses a dated, validated snapshot; it does not query NASA during a visitor's page load. The refresh script records whether NASA filled in a radius using its mass-radius model rather than a literature value, and carries the archive's mass provenance so the site can label minimum and model-estimated masses.
 
 ## Run locally
 

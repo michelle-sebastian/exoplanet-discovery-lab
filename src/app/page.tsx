@@ -44,13 +44,13 @@ const planetTypes = [
   {
     type: "gas-giant",
     title: "Gas giants",
-    range: ">= 8 Earth radii",
+    range: "≥ 8 Earth radii",
     description: "Large Jupiter- or Saturn-scale planets dominated by gas. They are easier to detect than small rocky planets because of their size and mass.",
   },
   {
     type: "hot-jupiter",
     title: "Hot Jupiters",
-    range: ">= 8 Earth radii, hot or close-in",
+    range: "≥ 8 Earth radii, hot or close-in",
     description: "Gas giants like Jupiter that orbit extremely close to their stars. They were among the first major surprises in exoplanet science.",
   },
 ];
@@ -123,7 +123,7 @@ const discoveryMethods = [
     icon: "astrometry",
     title: "Astrometry",
     description: "Astronomers measure a star's tiny side-to-side motion on the sky. This can reveal wider-orbit planets around nearby stars.",
-    example: "Gaia astrometric planets",
+    example: "Gaia-4 b",
   },
   {
     icon: "pulsar",
@@ -314,7 +314,7 @@ export default function HomePage() {
 
       <section aria-labelledby="credits-heading" className="border-t border-slate-200 bg-slate-50 py-12">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 id="credits-heading" className="text-xl font-bold">Acknowledgements &amp; data credits</h2>
+          <h2 id="credits-heading" className="text-xl font-bold">Acknowledgments &amp; data credits</h2>
           <div className="mt-5 grid gap-8 text-sm leading-relaxed text-slate-600 md:grid-cols-2">
             <div>
               <h3 className="font-bold text-slate-900">Data and learning resources</h3>
@@ -322,6 +322,7 @@ export default function HomePage() {
                 <li><a href="https://exoplanetarchive.ipac.caltech.edu/" target="_blank" rel="noreferrer" className="font-semibold text-teal-800 underline underline-offset-2">NASA Exoplanet Archive</a> (NExScI / Caltech): confirmed-planet catalog data.</li>
                 <li><a href="https://science.nasa.gov/exoplanets/" target="_blank" rel="noreferrer" className="font-semibold text-teal-800 underline underline-offset-2">NASA Science</a>: educational background and mission information.</li>
               </ul>
+              <p className="mt-3">This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with NASA under the Exoplanet Exploration Program.</p>
             </div>
             <div>
               <h3 className="font-bold text-slate-900">Image credits</h3>

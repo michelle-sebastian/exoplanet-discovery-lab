@@ -10,14 +10,18 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from "react";
+import { formatCatalogNumber, plottableValue } from "@/lib/catalog-values";
 
 export interface Planet {
   pl_name: string;
   hostname?: string;
   disc_year?: number | null;
   pl_rade: number;
+  pl_rade_is_calculated?: boolean;
   pl_orbper: number;
   pl_masse?: number | null;
+  pl_bmasse?: number | null;
+  pl_bmassprov?: string | null;
   pl_eqt?: number | null;
   pl_insol?: number | null;
   pl_orbsmax?: number | null;
@@ -129,9 +133,9 @@ export default function PlanetScatter({
 }: PlanetScatterProps) {
   const chartData = useMemo(() => {
     return data.filter((planet) => {
-      const x = planet[xField];
-      const y = planet[yField];
-      if (typeof x !== "number" || typeof y !== "number") return false;
+      const x = plottableValue(planet, xField);
+      const y = plottableValue(planet, yField);
+      if (x === null || y === null) return false;
       if (xScale === "log" && x <= 0) return false;
       if (yScale === "log" && y <= 0) return false;
       return true;
@@ -236,16 +240,24 @@ export default function PlanetScatter({
   const getDomain = (field: NumericPlanetField, scale: "linear" | "log") => {
     const vals = chartData
       .map((p) => p[field])
-      .filter((v): v is number => typeof v === "number" && v > 0);
+      .filter((v): v is number => typeof v === "number" && Number.isFinite(v) && (scale !== "log" || v > 0));
 
     if (!vals.length) return [1, 10];
-    if (scale === "log") return [Math.min(...vals), Math.max(...vals)];
-    return ["auto", "auto"];
+    if (scale === "log") return [10 ** Math.floor(Math.log10(Math.min(...vals))), 10 ** Math.ceil(Math.log10(Math.max(...vals)))];
+    const min = Math.min(...vals), max = Math.max(...vals);
+    const padding = (max - min || Math.abs(max) || 1) * 0.04;
+    return [min - padding, max + padding];
+  };
+
+  const logTicks = (field: NumericPlanetField, scale: "linear" | "log") => {
+    if (scale !== "log") return undefined;
+    const [min, max] = getDomain(field, scale) as number[];
+    return Array.from({ length: Math.round(Math.log10(max) - Math.log10(min)) + 1 }, (_, index) => min * 10 ** index);
   };
 
   const formatTick = (field: NumericPlanetField) => (value: number) => {
     if (field === "disc_year") return `${Math.round(value)}`;
-    return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    return formatCatalogNumber(value);
   };
 
   const groupedData = useMemo(() => {
@@ -290,26 +302,26 @@ export default function PlanetScatter({
           <XAxis
             dataKey={xField}
             name={xLabel}
-            unit={xUnit}
             type="number"
             scale={xScale}
             domain={getDomain(xField, xScale)}
+            ticks={logTicks(xField, xScale)}
             tick={{ fontSize: 11 }}
             tickFormatter={formatTick(xField)}
-            label={{ value: xLabel, position: "bottom" }}
+            label={{ value: `${xLabel}${xUnit ? ` (${xUnit.trim()})` : ""}`, position: "bottom" }}
           />
 
           <YAxis
             dataKey={yField}
             name={yLabel}
-            unit={yUnit}
             type="number"
             scale={yScale}
             domain={getDomain(yField, yScale)}
+            ticks={logTicks(yField, yScale)}
             tick={{ fontSize: 11 }}
             tickFormatter={formatTick(yField)}
             label={{
-              value: yLabel,
+              value: `${yLabel}${yUnit ? ` (${yUnit.trim()})` : ""}`,
               angle: -90,
               position: "insideLeft",
             }}

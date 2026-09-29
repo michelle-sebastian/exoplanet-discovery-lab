@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Planet } from "@/components/PlanetScatter";
 import { catalogFlux, planetHabitabilityUrl } from "@/lib/habitability";
+import { catalogMass, publishedRadius } from "@/lib/catalog-values";
 import { nasaPlanetResources } from "@/lib/planet-resources";
 import datasetMeta from "@/data/dataset-meta.json";
 
@@ -118,7 +119,9 @@ export default function FollowUpInvestigation({ planets, selectedName, onSelect 
   const name = study.name;
   const planet = planets.find(item => item.pl_name === study.name);
   const flux = planet ? catalogFlux(planet) : null;
-  const density = planet && planet.pl_masse && planet.pl_rade ? planet.pl_masse / planet.pl_rade ** 3 : null;
+  const radius = planet ? publishedRadius(planet) : null;
+  const mass = planet ? catalogMass(planet) : null;
+  const density = radius && mass?.label === "Mass" ? mass.value / radius ** 3 : null;
   const resources = nasaPlanetResources(study.name);
 
   return <div className="space-y-5">
@@ -132,16 +135,16 @@ export default function FollowUpInvestigation({ planets, selectedName, onSelect 
     <section className="lab-panel p-4 sm:p-6" aria-labelledby="followup-planet-heading">
       <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="page-eyebrow">Real-world evidence file</p><h3 id="followup-planet-heading" className="mt-1 text-2xl font-semibold">{study.name}</h3><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700">{study.focus}</p></div><Link href={planetHabitabilityUrl(study.name, { section: "investigate" })} className="rounded-md border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-800 hover:bg-teal-100">View habitability profile →</Link></div>
       <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">{[
-        ["Radius", `${number(planet?.pl_rade)} × Earth`], ["Mass", `${number(planet?.pl_masse)}${typeof planet?.pl_masse === "number" ? " × Earth" : ""}`],
+        ["Published radius", `${number(radius)}${radius !== null ? " × Earth" : ""}`], [mass?.label ?? "Mass", `${number(mass?.value)}${mass ? " × Earth" : ""}`],
         ["Starlight", `${number(flux?.value)}${flux ? ` × Earth${flux.estimated ? " (estimated)" : ""}` : ""}`], ["Host star", planet?.hostname || "Unavailable"],
       ].map(([label, value]) => <div key={label} className="rounded-md bg-slate-50 px-3 py-2"><div className="text-xs font-semibold text-slate-500">{label}</div><div className="mt-1 text-sm font-bold text-slate-950">{value}</div></div>)}</div>
-      <p className="mt-3 text-xs leading-5 text-slate-600">NASA Exoplanet Archive composite snapshot: {datasetMeta.fetched_at}. {density ? `Mass ÷ radius³ gives an approximate bulk density of ${number(density)} × Earth’s; composition still requires models.` : "This snapshot lacks a mass value, so it cannot give a bulk-density comparison."} Measurements and published interpretations may be revised.</p>
+      <p className="mt-3 text-xs leading-5 text-slate-600">NASA Exoplanet Archive composite snapshot: {datasetMeta.fetched_at}. {density ? `Mass ÷ radius³ gives an approximate bulk density of ${number(density)} × Earth’s; composition still requires models.` : "A published radius and non-model, non-minimum mass are both needed for a bulk-density comparison."} Measurements and published interpretations may be revised.</p>
       <a href={resources.archive} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-xs font-semibold text-teal-800 underline">Check the current NASA Archive record ↗</a>
     </section>
 
     <div className="grid gap-4 lg:grid-cols-2">
       <EvidenceCard title="1. Interior and composition" question="Does size and mass suggest a rocky world?" evidence={{
-        observed: density ? `This catalog snapshot lists a radius of ${number(planet?.pl_rade)} Earth radii and mass of ${number(planet?.pl_masse)} Earth masses.` : "The catalog snapshot has a radius but no mass value for this planet.",
+        observed: density ? `This catalog snapshot lists a published radius of ${number(radius)} Earth radii and mass of ${number(mass?.value)} Earth masses.` : "This snapshot does not provide both a published radius and a non-model, non-minimum mass for this comparison.",
         inference: density ? "Together they give bulk density, which can test broad interior models; different mixtures can still fit." : "A precise mass would make density-based comparisons possible.",
         unknown: "Density alone cannot tell us whether the surface has air, liquid water, or life.",
         sources: [{ label: "NASA Archive: planet parameters", url: resources.archive }, { label: "NASA: why mass and radius matter", url: "https://science.nasa.gov/resource/kepler-78b/" }],

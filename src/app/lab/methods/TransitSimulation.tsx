@@ -104,7 +104,7 @@ export default function TransitSimulation({ planets }: { planets: Planet[] }) {
         </svg>
       </div>
       <output className="block border-l-4 border-amber-600 bg-amber-50 px-4 py-3 text-sm leading-6 text-slate-800">
-        At {selectedPoint.time.toFixed(2)} days, relative brightness is <strong>{selectedPoint.flux.toFixed(5)}</strong>. Assuming normal brightness is 1.0: (1 - {selectedPoint.flux.toFixed(5)}) × 100 = <strong>{selectedDepthPercent.toFixed(4)}%</strong> relative to baseline. A positive value means the star is dimmer; inspect the center of a dip for your estimate.
+        At {selectedPoint.time.toFixed(2)} days, relative brightness is <strong>{selectedPoint.flux.toFixed(5)}</strong>. {selectedDepthPercent >= 0 ? <>Dimming: <strong>{selectedDepthPercent.toFixed(4)}%</strong>.</> : <>Brightening above baseline: <strong>{Math.abs(selectedDepthPercent).toFixed(4)}%</strong> (not a transit dip).</>} Using normal brightness 1.0, the change is (1 − {selectedPoint.flux.toFixed(5)}) × 100. Inspect the center of a dip for your transit-depth estimate.
       </output>
       <div className="flex flex-wrap items-end gap-4">
         <label className="min-w-52 flex-1 text-sm font-medium">Move the orange line to a dip: {marker.toFixed(2)} days

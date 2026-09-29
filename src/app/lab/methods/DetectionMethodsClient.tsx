@@ -63,7 +63,7 @@ export default function DetectionMethodsClient({ planets, exercisePlanets }: { p
     <header id="methods-top" tabIndex={-1} className="page-intro" style={{ borderBottom: "none", paddingBottom: 0, marginBottom: 0, scrollMarginTop: "2.5rem" }}>
       <p className="page-eyebrow">Interactive lab</p>
       <h1 className="mt-2">Detection Methods Lab</h1>
-      <p className="mt-3 leading-7 text-slate-700" style={{ maxWidth: "none" }}>Explore how astronomers find exoplanets. In this section, we&apos;re focusing on two methods - <strong>transits and radial velocity</strong>. Measure a simulated transit, investigate published brightness and stellar-velocity data, then use the evidence to choose which known systems would produce clearer signals. A bonus quiz introduces direct imaging, with NASA resources to explore other detection methods.</p>
+      <p className="mt-3 leading-7 text-slate-700" style={{ maxWidth: "none" }}>Explore how astronomers find exoplanets. In this section, we focus on two methods: <strong>transits and radial velocity</strong>. Measure a simulated transit, investigate published brightness and stellar-velocity data, then use the evidence to choose which known systems would produce clearer signals. A bonus quiz introduces direct imaging, with NASA resources to explore other detection methods.</p>
     </header>
     <div className="section-nav" role="tablist" aria-label="Detection Methods Lab sections">
       {sections.map(({ key, label }, index) => <button key={key} id={`methods-${key}-tab`} type="button" role="tab" aria-selected={tab === key} aria-controls={`methods-${key}-panel`} tabIndex={tab === key ? 0 : -1} onClick={() => selectSection(key)} onKeyDown={event => {

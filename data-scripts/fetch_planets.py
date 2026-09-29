@@ -6,7 +6,7 @@ from urllib.request import urlopen
 
 SELECT_COLUMNS = (
     "pl_name,hostname,discoverymethod,disc_year,"
-    "pl_orbper,pl_rade,pl_masse,pl_eqt,pl_insol,pl_orbsmax,sy_dist,"
+    "pl_orbper,pl_rade,pl_rade_reflink,pl_masse,pl_bmasse,pl_bmassprov,pl_eqt,pl_insol,pl_orbsmax,sy_dist,"
     "st_teff,st_rad,st_mass,st_met,sy_pnum"
 )
 
@@ -34,6 +34,13 @@ out_path = Path(__file__).resolve().parents[1] / "src" / "data" / "planets.json"
 out_path.parent.mkdir(parents=True, exist_ok=True)
 
 rows, body = fetch_rows()
+for row in rows:
+    reference = row.pop("pl_rade_reflink") or ""
+    if row["pl_rade"] is not None and not reference:
+        raise ValueError(f"NASA radius provenance is missing for {row['pl_name']}")
+    if row["pl_bmasse"] is not None and not row["pl_bmassprov"]:
+        raise ValueError(f"NASA mass provenance is missing for {row['pl_name']}")
+    row["pl_rade_is_calculated"] = "CALCULATED_VALUE" in reference or "Calculated Value" in reference
 fetched_at = datetime.now(timezone.utc)
 previous_count = 0
 if out_path.exists():

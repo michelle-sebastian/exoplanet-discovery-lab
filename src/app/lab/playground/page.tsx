@@ -3,12 +3,16 @@ import planets from "@/data/planets.json";
 import datasetMeta from "@/data/dataset-meta.json";
 import PlaygroundClient from "./PlaygroundClient";
 import type { Planet } from "@/components/PlanetScatter";
+import { publishedRadius } from "@/lib/catalog-values";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Planet Playground | Exoplanet Explorer" };
 
 export default function PlaygroundPage() {
   const planetData = planets as Planet[];
   const chartReadyCount = planetData.filter(
     (planet) =>
-      typeof planet.pl_rade === "number" &&
+      publishedRadius(planet) !== null &&
       typeof planet.pl_orbper === "number" &&
       planet.pl_orbper > 0
   ).length;

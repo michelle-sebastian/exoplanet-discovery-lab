@@ -11,6 +11,7 @@ import PlanetScatter, {
   type NumericPlanetField,
 } from "@/components/PlanetScatter";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { catalogMass, estimatedRadius, formatCatalogNumber, plottableValue, publishedRadius } from "@/lib/catalog-values";
 
 interface PlaygroundClientProps {
   planets: Planet[];
@@ -105,11 +106,11 @@ const PLANET_TYPE_DETAILS: Record<string, { range: string; description: string }
     description: "Ice-giant-scale planets broadly comparable to Uranus or Neptune in size.",
   },
   "Gas giant": {
-    range: ">= 8 R⊕",
+    range: "≥ 8 R⊕",
     description: "Large Jupiter- or Saturn-scale worlds dominated by gas rather than solid surface.",
   },
   "Hot Jupiter": {
-    range: ">= 8 R⊕, hot/close-in",
+    range: "≥ 8 R⊕, hot/close-in",
     description: "Gas giants orbiting very close to their stars, usually with extremely hot atmospheres.",
   },
   Unclassified: {
@@ -284,8 +285,7 @@ function isFullRange(value: RangeValue, full: RangeValue) {
 }
 
 function formatNumber(value: number | null | undefined, suffix = "") {
-  if (typeof value !== "number" || Number.isNaN(value)) return "Unknown";
-  return `${Number.isInteger(value) ? value : value.toLocaleString(undefined, { maximumFractionDigits: 2 })}${suffix}`;
+  return formatCatalogNumber(value, suffix);
 }
 
 function formatYear(value: number | null | undefined) {
@@ -306,13 +306,13 @@ function getInsolation(planet: Planet) {
 function formatInsolation(planet: Planet) {
   const value = getInsolation(planet);
   if (value === null) return "Unknown";
-  return `${value.toLocaleString(undefined, { maximumFractionDigits: 2 })} S⊕${
+  return `${formatCatalogNumber(value)} S⊕${
     typeof planet.pl_insol === "number" ? "" : " est."
   }`;
 }
 
 export function getPlanetType(planet: Planet) {
-  const radius = planet.pl_rade;
+  const radius = publishedRadius(planet);
   const hot =
     (typeof planet.pl_eqt === "number" && planet.pl_eqt >= 700) ||
     (typeof planet.pl_orbper === "number" && planet.pl_orbper <= 10);
@@ -543,6 +543,9 @@ export function PlanetDetailsPanel({
 
   const starType = getStarType(planet.st_teff);
   const planetType = getPlanetType(planet);
+  const mass = catalogMass(planet);
+  const radius = publishedRadius(planet);
+  const radiusEstimate = estimatedRadius(planet);
   const typeDetails = PLANET_TYPE_DETAILS[planetType];
 
   return (
@@ -604,13 +607,13 @@ export function PlanetDetailsPanel({
             <div className="text-center">{planet.pl_name}</div>
             <div className="text-center">Earth</div>
           </div>
-          <DetailRow label="Radius" planet={formatNumber(planet.pl_rade, " R⊕")} earth={`${EARTH.pl_rade} R⊕`} />
-          <DetailRow label="Mass" planet={formatNumber(planet.pl_masse, " M⊕")} earth={`${EARTH.pl_masse} M⊕`} />
+          <DetailRow label="Radius" planet={radius !== null ? formatNumber(radius, " R⊕") : radiusEstimate !== null ? `Unknown (NASA model estimate: ${formatNumber(radiusEstimate, " R⊕")})` : "Unknown"} earth={`${EARTH.pl_rade} R⊕`} />
+          <DetailRow label={mass?.label ?? "Mass"} planet={formatNumber(mass?.value, " M⊕")} earth={`${EARTH.pl_masse} M⊕`} />
           <DetailRow label="Orbital period" planet={formatNumber(planet.pl_orbper, " days")} earth={`${EARTH.pl_orbper} days`} />
           <DetailRow label="Orbital distance" planet={formatNumber(planet.pl_orbsmax, " AU")} earth="1 AU" />
           <DetailRow label="Equilibrium temp." planet={formatNumber(planet.pl_eqt, " K")} earth={`${EARTH.pl_eqt} K`} />
           <DetailRow label="Insolation" planet={formatInsolation(planet)} earth={`${EARTH.pl_insol} S⊕`} />
-          <DetailRow label="Distance from Earth" planet={formatNumber(planet.sy_dist, " pc")} earth={`${EARTH.sy_dist} pc`} />
+          <DetailRow label="Distance from Earth" planet={formatNumber(planet.sy_dist, " pc")} earth="—" />
           <DetailRow label="Discovery year" planet={formatYear(planet.disc_year)} earth="-" />
           <DetailRow label="Discovery method" planet={planet.discoverymethod ?? "Unknown"} earth="-" />
         </div>
@@ -628,7 +631,7 @@ export function PlanetDetailsPanel({
             <span className="text-slate-500">Mass</span>
             <span>{formatNumber(planet.st_mass, " M☉")}</span>
             <span className="text-slate-500">Metallicity</span>
-            <span>{formatNumber(planet.st_met)}</span>
+            <span>{formatNumber(planet.st_met, " dex")}</span>
             <span className="text-slate-500">Known planets</span>
             <span>{formatNumber(planet.sy_pnum)}</span>
           </div>
@@ -750,14 +753,13 @@ export default function PlaygroundClient({
 
   const filtered = useMemo(() => {
     return planets.filter((p) => {
-      const x = p[xField];
-      const y = p[yField];
-      if (typeof x !== "number" || !Number.isFinite(x) ||
-          typeof y !== "number" || !Number.isFinite(y) ||
+      const x = plottableValue(p, xField);
+      const y = plottableValue(p, yField);
+      if (x === null || y === null ||
           (axisOption(xField).scale === "log" && x <= 0) ||
           (axisOption(yField).scale === "log" && y <= 0)) return false;
       if (!isFullRange(radiusRange, RADIUS_RANGE) &&
-          (typeof p.pl_rade !== "number" || p.pl_rade < radiusRange[0] || p.pl_rade > radiusRange[1])) return false;
+          (publishedRadius(p) === null || publishedRadius(p)! < radiusRange[0] || publishedRadius(p)! > radiusRange[1])) return false;
       if (periodLimit < maxPeriod &&
           (typeof p.pl_orbper !== "number" || p.pl_orbper <= 0 || p.pl_orbper > periodLimit)) return false;
 
@@ -1082,11 +1084,11 @@ export default function PlaygroundClient({
           </div>
 
         <details className="group mb-4 rounded-lg border border-teal-200 bg-teal-50/60 px-3 py-2">
-          <summary className="flex cursor-pointer list-none items-center gap-3 text-sm text-teal-950 [&::-webkit-details-marker]:hidden">
+          <summary className="flex min-w-0 flex-wrap cursor-pointer list-none items-center gap-2 text-sm text-teal-950 [&::-webkit-details-marker]:hidden">
             <span aria-hidden="true" className="shrink-0 transition-transform group-open:rotate-90">▸</span>
-            <span className="shrink-0 font-semibold">Filter chart below using planet properties</span>
-            <span className="min-w-0 flex-1 truncate text-xs text-teal-900">Radius: {formatRange(radiusRangeRaw, "R⊕")} · {planetTypeSummary} · {methodSummary} · temperature, starlight &amp; more</span>
-            <span className="shrink-0 rounded-md bg-teal-700 px-3 py-1 text-xs font-semibold text-white"><span className="group-open:hidden">Expand filters ↓</span><span className="hidden group-open:inline">Collapse filters ↑</span></span>
+            <span className="min-w-0 font-semibold">Filter chart below using planet properties</span>
+            <span className="hidden min-w-0 flex-1 truncate text-xs text-teal-900 sm:inline">Radius: {formatRange(radiusRangeRaw, "R⊕")} · {planetTypeSummary} · {methodSummary} · temperature, starlight &amp; more</span>
+            <span className="rounded-md bg-teal-700 px-3 py-1 text-xs font-semibold text-white"><span className="group-open:hidden">Expand filters ↓</span><span className="hidden group-open:inline">Collapse filters ↑</span></span>
           </summary>
           <div className="my-3 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-slate-600">Combine filters to investigate your question. Information icons explain each property.</p>
@@ -1357,7 +1359,7 @@ export default function PlaygroundClient({
           <div className="mt-5 border-t border-slate-100 pt-4">
           <details className="mb-4 text-xs leading-5 text-slate-600">
             <summary className="cursor-pointer">About the data and missing measurements</summary>
-            <p className="mt-2">This NASA Exoplanet Archive snapshot was refreshed on {datasetRefreshedAt}. It contains {planets.length.toLocaleString()} planets; {chartReadyCount.toLocaleString()} have radius and orbital-period measurements. This chart shows only planets with usable measurements for both selected axes and matching your filters. A missing value means unknown, not zero.</p>
+            <p className="mt-2">This NASA Exoplanet Archive snapshot was refreshed on {datasetRefreshedAt}. It contains {planets.length.toLocaleString()} planets; {chartReadyCount.toLocaleString()} have a published radius and orbital-period value. Radius-based charts omit NASA-calculated radii. Other axes show planets with usable values for both selected properties and matching your filters. A missing value means unknown, not zero.</p>
           </details>
           {xOption.scale === "log" || yOption.scale === "log" ? <p className="mb-3 text-xs leading-5 text-slate-600">Logarithmic axes: {[xOption.scale === "log" ? `X (${xOption.label})` : null, yOption.scale === "log" ? `Y (${yOption.label})` : null].filter(Boolean).join(" and ")}. Equal spacing represents multiplication, such as 1 → 10 → 100, rather than equal amounts.</p> : null}
           </div>

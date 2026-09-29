@@ -3,6 +3,9 @@ import { planetHabitabilityUrl } from "@/lib/habitability";
 import HabitableZoneClient from "./HabitableZoneClient";
 import planets from "@/data/planets.json";
 import type { Planet } from "@/components/PlanetScatter";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Habitable Zone Explorer | Exoplanet Explorer" };
 
 export default async function HabitableZonePage({ searchParams }: {
   searchParams: Promise<{ planet?: string | string[] }>;

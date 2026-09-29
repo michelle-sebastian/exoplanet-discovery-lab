@@ -5,6 +5,7 @@ import Link from "next/link";
 import SectionNav from "@/components/SectionNav";
 import TerminologyGlossary, { GlossaryPreview, type GlossaryTopic } from "./TerminologyGlossary";
 import type { Planet } from "@/components/PlanetScatter";
+import { catalogMass, publishedRadius } from "@/lib/catalog-values";
 
 type Field = "pl_rade" | "pl_masse" | "pl_orbper" | "pl_insol" | "pl_eqt" | "sy_dist" | "st_teff" | "discoverymethod";
 const concepts: { field: Field; title: string; unit: string; meaning: string; use: string; limit: string; correct: string; incorrect: string }[] = [
@@ -28,7 +29,8 @@ export default function ExoplanetGlossaryClient({ planets }: { planets: Planet[]
   const planet = planets.find((item) => item.pl_name === planetName) ?? planets[0];
   const concept = concepts.find((item) => item.field === field) ?? concepts[0];
   if (!planet) return null;
-  const value = planet[field];
+  const mass = catalogMass(planet);
+  const value = field === "pl_rade" ? publishedRadius(planet) : field === "pl_masse" ? mass?.value : planet[field];
   const display = typeof value === "number" ? value.toLocaleString(undefined, { maximumFractionDigits: value < 1 ? 3 : 2 }) : value || "Not available";
 
   return <main id="page-top" className="site-page space-y-8">
@@ -60,6 +62,8 @@ export default function ExoplanetGlossaryClient({ planets }: { planets: Planet[]
         <h3 id="property-heading" className="text-2xl font-semibold">{concept.title}</h3>
         <p className="mt-2 text-sm text-slate-500">{planet.pl_name}</p>
         <p className="mt-3 text-3xl font-semibold text-teal-800">{display} <span className="text-base font-medium text-slate-600">{concept.unit}</span></p>
+        {field === "pl_masse" && mass ? <p className="mt-1 text-sm font-semibold text-slate-600">{mass.label}</p> : null}
+        {field === "pl_rade" && publishedRadius(planet) === null ? <p className="mt-1 text-sm text-slate-600">A published radius is unavailable; NASA-calculated radius estimates are not shown as measurements.</p> : null}
         <dl className="mt-8 grid gap-6 sm:grid-cols-3">
           <div className="border-t-2 border-teal-600 pt-3"><dt className="text-sm font-semibold">Meaning</dt><dd className="mt-2 text-sm leading-6 text-slate-700">{concept.meaning}</dd></div>
           <div className="border-t-2 border-slate-300 pt-3"><dt className="text-sm font-semibold">Why it matters</dt><dd className="mt-2 text-sm leading-6 text-slate-700">{concept.use}</dd></div>

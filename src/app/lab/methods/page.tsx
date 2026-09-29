@@ -2,6 +2,9 @@ import planets from "@/data/planets.json";
 import type { Planet } from "@/components/PlanetScatter";
 import DetectionMethodsClient from "./DetectionMethodsClient";
 import { Suspense } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Detection Methods Lab | Exoplanet Explorer" };
 
 const examples = ["TRAPPIST-1 e", "HD 209458 b", "Kepler-10 b"];
 

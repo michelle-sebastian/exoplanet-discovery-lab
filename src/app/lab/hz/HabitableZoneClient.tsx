@@ -134,6 +134,7 @@ export default function HabitableZoneClient() {
   const setTab = (section: HabitableZoneSection) => updateLocation("section", section);
   const [starKey, setStarKey] = useState("g");
   const [distance, setDistance] = useState(1);
+  const [distanceInput, setDistanceInput] = useState("1");
   const [innerFlux, setInnerFlux] = useState(1.7);
   const [outerFlux, setOuterFlux] = useState(0.35);
   const [albedo, setAlbedo] = useState(0.3);
@@ -149,13 +150,14 @@ export default function HabitableZoneClient() {
   const surfaceTemp = eqTemp + greenhouse;
   const status = statusForFlux(planetFlux, innerFlux, outerFlux);
   const maxDistance = Math.max(5, distance, outerDistance * 1.8);
+  const distanceSliderPosition = Math.sqrt(Math.max(0, (distance - 0.001) / (maxDistance - 0.001))) * 1000;
   const diagramMax = Math.max(0.1, outerDistance * 1.6, distance * 1.15);
   const planetPosition = Math.min(100, (distance / diagramMax) * 100);
   const innerPosition = Math.min(100, (innerDistance / diagramMax) * 100);
   const outerPosition = Math.min(100, (outerDistance / diagramMax) * 100);
 
   const resetEarth = () => {
-    setStarKey("g"); setDistance(1); setAlbedo(0.3); setGreenhouse(33);
+    setStarKey("g"); setDistance(1); setDistanceInput("1"); setAlbedo(0.3); setGreenhouse(33);
     setInnerFlux(1.7); setOuterFlux(0.35);
   };
 
@@ -194,7 +196,7 @@ export default function HabitableZoneClient() {
               <div className="mt-2 flex flex-wrap gap-2">{STAR_PRESETS.map(star => <button key={star.key} type="button" onClick={() => setStarKey(star.key)} className={`rounded-md border px-3 py-2 text-left text-sm ${starKey === star.key ? "border-emerald-500 bg-emerald-50 text-emerald-950" : "border-slate-200 hover:border-emerald-300"}`}>{star.name}</button>)}</div>
               <p className="mt-2 text-xs leading-5 text-slate-500">{selectedStar.note}</p>
             </div>
-            <div><label className="flex justify-between text-sm font-semibold text-slate-950">Orbital distance<span>{format(distance)} AU</span></label><input type="range" aria-label="Orbital distance" min={0.001} max={maxDistance} step={0.001} value={distance} onChange={event => setDistance(Number(event.target.value))} className="mt-2 w-full" /><p className="mt-1 text-xs leading-5 text-slate-600">1 AU is Earth’s distance from the Sun; 1 S⊕ is Earth’s starlight.</p></div>
+            <div><label className="flex justify-between text-sm font-semibold text-slate-950">Orbital distance<span>{format(distance)} AU</span></label><input type="range" aria-label="Orbital distance slider" min={0} max={1000} step={1} value={distanceSliderPosition} onChange={event => { const fraction = Number(event.target.value) / 1000; const value = Math.max(0.001, Math.round((0.001 + (maxDistance - 0.001) * fraction ** 2) * 1000) / 1000); setDistance(value); setDistanceInput(String(value)); }} className="mt-2 w-full" /><label className="mt-2 flex items-center gap-2 text-xs text-slate-600">Exact distance (AU)<input type="number" min={0.001} step={0.001} value={distanceInput} onChange={event => { setDistanceInput(event.target.value); const value = Number(event.target.value); if (event.target.value && Number.isFinite(value) && value >= 0.001) setDistance(value); }} onBlur={() => setDistanceInput(String(distance))} className="w-24 border px-2 py-1 text-sm" /></label><p className="mt-1 text-xs leading-5 text-slate-600">The slider gives extra room to close-in orbits. 1 AU is Earth’s distance from the Sun; 1 S⊕ is Earth’s starlight.</p></div>
           </div>
 
         </div>
