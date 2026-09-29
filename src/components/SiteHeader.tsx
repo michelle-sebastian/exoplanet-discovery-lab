@@ -1,37 +1,64 @@
-// src/components/SiteHeader.tsx
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "Planet Playground", href: "/lab/playground" },
+  { label: "Habitable Zone Explorer", href: "/lab/hz" },
+  { label: "Detection Methods Lab", href: "/lab/methods" },
+  { label: "Discovery Timeline", href: "/lab/timeline" },
+  { label: "Exoplanet Glossary", href: "/glossary" },
+  { label: "About", href: "/about" },
+];
 
 export default function SiteHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        {/* Logo + label -> Home */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-700" />
-          <span className="text-lg font-semibold text-slate-800">
-            Exoplanet Explorer
-          </span>
+    <header className="site-header">
+      <div className="site-header-inner">
+        <Link href="/" className="shrink-0 text-lg font-bold text-slate-900 sm:text-xl" aria-label="Exoplanet Explorer home">
+          Exoplanet <span className="text-teal-700">Explorer</span>
         </Link>
 
-        {/* Top nav */}
-        <nav className="hidden gap-8 text-sm font-medium text-slate-700 md:flex">
-          <Link href="/" className="hover:text-blue-700">
-            Home
-          </Link>
-          <Link href="/modules" className="hover:text-blue-700">
-            Modules
-          </Link>
-          <Link href="/lab/playground" className="hover:text-blue-700">
-            Explore Data
-          </Link>
-          <Link href="/#missions" className="hover:text-blue-700">
-            Missions
-          </Link>
-          <Link href="/#astroguide" className="hover:text-blue-700">
-            AstroGuide
-          </Link>
+        <nav aria-label="Main navigation" className="site-desktop-nav">
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined} className={`site-nav-link ${pathname === item.href ? "text-teal-800" : ""}`}>
+              {item.label}
+            </Link>
+          ))}
         </nav>
+        <button
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-site-nav"
+          onClick={() => setMenuOpen((open) => !open)}
+          className="site-menu-button"
+        >
+          <span aria-hidden="true" className="flex w-4 flex-col gap-1">
+            <span className="h-0.5 w-4 bg-current" />
+            <span className="h-0.5 w-4 bg-current" />
+            <span className="h-0.5 w-4 bg-current" />
+          </span>
+          Menu
+        </button>
       </div>
+      {menuOpen && (
+        <nav id="mobile-site-nav" aria-label="Site" className="site-mobile-nav">
+          <div className="mx-auto grid max-w-6xl gap-1">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined} onClick={() => setMenuOpen(false)} className="site-nav-link">
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
     </header>
   );
 }

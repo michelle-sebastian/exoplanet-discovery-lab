@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Exoplanet Explorer">
+  <rect width="64" height="64" rx="14" fill="#10263a"/>
+  <ellipse cx="32" cy="32" rx="27" ry="10" transform="rotate(-24 32 32)" fill="none" stroke="#86e2d2" stroke-width="4"/>
+  <circle cx="32" cy="32" r="16" fill="#087f75"/>
+  <path d="M20 27c5-9 14-12 22-7-5-1-10 2-13 7-4 6-4 13 0 19-8-3-12-11-9-19Z" fill="#27b7a7"/>
+  <path d="M48 24c6 2 10 3 11 8-4 5-10 8-17 10" fill="none" stroke="#86e2d2" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="14" cy="14" r="2" fill="#f4d788"/>
+</svg>
