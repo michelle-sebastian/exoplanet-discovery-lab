@@ -11,7 +11,7 @@ const linkStyle = "font-semibold text-teal-800 underline underline-offset-4 hove
 export default function AboutPage() {
   return (
     <main className="site-page ">
-      <header className="page-intro">
+      <header className="page-intro page-intro-wide">
         <p className="text-xs font-semibold uppercase tracking-widest text-teal-700">Curiosity, discovery, and sharing what we learn</p>
         <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">About Exoplanet Explorer</h1>
         <p className="mt-3 text-base leading-7 text-slate-700">An educational project created by Michelle Sebastian to help students explore worlds beyond our solar system. Using real NASA Exoplanet Archive data, it turns astronomical measurements into questions you can investigate for yourself.</p>
@@ -48,7 +48,7 @@ export default function AboutPage() {
       <section id="research" aria-labelledby="research-heading" className="mt-12 scroll-mt-24 border-t border-slate-200 pt-8">
         <p className="text-xs font-semibold uppercase tracking-widest text-teal-700">From questions to evidence</p>
         <h2 id="research-heading" className="mt-2 text-2xl font-semibold">My research on star clusters</h2>
-        <p className="mt-3 max-w-3xl leading-7 text-slate-700">What determines the size of a star cluster? My research examines how cluster mass, age, and the star-forming activity of the host galaxy relate to cluster radius. It has been an opportunity to test ideas against observations and learn from results that challenge an initial hypothesis.</p>
+        <p className="mt-3 leading-7 text-slate-700">What determines the size of a star cluster? My research examines how cluster mass, age, and the star-forming activity of the host galaxy relate to cluster radius. It has been an opportunity to test ideas against observations and learn from results that challenge an initial hypothesis.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-[1.5fr_1fr]">
           <article className="lab-panel p-6">
             <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">Research preprint · arXiv</p>

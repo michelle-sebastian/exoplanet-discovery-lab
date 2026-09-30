@@ -32,6 +32,7 @@ button:disabled { cursor: not-allowed; }
 .page-intro { padding-bottom: 1.75rem; border-bottom: 1px solid var(--line); margin-bottom: 2rem; }
 .page-intro > p:first-child, .page-eyebrow { color: var(--brand); font-size: .75rem; font-weight: 650; text-transform: uppercase; letter-spacing: .08em; }
 .page-intro > p:last-child { max-width: 75ch; }
+.page-intro-wide > p:last-child { max-width: none; }
 .lab-panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
 .reference-panel { background: var(--brand-soft); border: 1px solid var(--line); border-radius: 10px; padding: 1.5rem; }
 .button-primary { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; border: 1px solid var(--brand); border-radius: 6px; background: var(--brand); padding: .625rem 1rem; color: white; font-size: .875rem; font-weight: 600; }
