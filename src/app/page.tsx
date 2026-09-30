@@ -173,6 +173,7 @@ export default function HomePage() {
           <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-100 sm:text-lg">
             Exoplanet Explorer uses the NASA Exoplanet Archive and mission catalogs to turn authentic telescope data into accessible visualizations, stories, and challenges.
           </p>
+          <Link href="/lab/playground" className="mt-6 inline-flex min-h-11 items-center rounded-md bg-teal-600 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-500">Explore Planet Playground →</Link>
         </div>
       </section>
 
@@ -182,7 +183,7 @@ export default function HomePage() {
           <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">{confirmedPlanetCount}</p>
         </div>
         <div className="min-w-0 border-r border-slate-200 px-3 py-4 sm:px-6 sm:py-5">
-          <a href="https://exoplanetarchive.ipac.caltech.edu/docs/counts_detail.html" target="_blank" rel="noreferrer" title="NASA Exoplanet Archive TESS project candidate statistics" className="text-[11px] font-bold uppercase leading-tight text-slate-500 underline underline-offset-2 hover:text-teal-800 sm:text-xs">TESS candidates</a>
+          <a href="https://exoplanetarchive.ipac.caltech.edu/docs/counts_detail.html" target="_blank" rel="noreferrer" title="NASA Exoplanet Archive TESS project candidate statistics" className="block w-fit text-[11px] font-bold uppercase leading-tight text-slate-500 underline underline-offset-2 hover:text-teal-800 sm:text-xs">TESS candidates</a>
           <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">8,100+</p>
           <p className="mt-1 text-[11px] leading-tight text-slate-500">Not all confirmed</p>
         </div>
@@ -190,21 +191,6 @@ export default function HomePage() {
           <p className="text-[11px] font-bold uppercase leading-tight text-slate-500 sm:text-xs">Years of discoveries</p>
           <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">30+</p>
         </div>
-      </section>
-
-      <section aria-label="Explore the site" className="grid grid-cols-3 border-b border-slate-200">
-        <Link href="/lab/playground" className="group min-w-0 border-r border-slate-200 px-3 py-4 transition-colors hover:bg-teal-50 focus-visible:bg-teal-50 sm:px-6 sm:py-5 lg:pl-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]">
-          <span className="block text-xs font-bold leading-snug text-slate-900 sm:text-lg">Planet Playground <span aria-hidden="true" className="hidden text-teal-700 sm:inline">↗</span></span>
-          <span className="mt-2 hidden text-[11px] leading-snug text-slate-600 min-[360px]:block sm:text-sm">Search and compare planets</span>
-        </Link>
-        <Link href="/lab/methods" className="group min-w-0 border-r border-slate-200 px-3 py-4 transition-colors hover:bg-teal-50 focus-visible:bg-teal-50 sm:px-6 sm:py-5">
-          <span className="block text-xs font-bold leading-snug text-slate-900 sm:text-lg">Detection Lab <span aria-hidden="true" className="hidden text-teal-700 sm:inline">↗</span></span>
-          <span className="mt-2 hidden text-[11px] leading-snug text-slate-600 min-[360px]:block sm:text-sm">Examine measured signals</span>
-        </Link>
-        <Link href="/lab/hz" className="group min-w-0 px-3 py-4 transition-colors hover:bg-teal-50 focus-visible:bg-teal-50 sm:px-6 sm:py-5">
-          <span className="block text-xs font-bold leading-snug text-slate-900 sm:text-lg">Habitable Zone <span aria-hidden="true" className="hidden text-teal-700 sm:inline">↗</span></span>
-          <span className="mt-2 hidden text-[11px] leading-snug text-slate-600 min-[360px]:block sm:text-sm">Explore possible habitability</span>
-        </Link>
       </section>
 
       <section aria-labelledby="science-heading" className="pt-6 sm:pt-10">
@@ -251,7 +237,10 @@ export default function HomePage() {
                 <li>Some orbits take hours; others take centuries.</li>
                 <li>Some rocky planets receive roughly Earth-like levels of starlight, though that alone does not establish habitability.</li>
               </ul>
-              <a href="https://science.nasa.gov/exoplanets/big-questions/" target="_blank" rel="noreferrer" className="mt-5 inline-block text-sm font-bold text-teal-800 underline underline-offset-4 hover:text-teal-950">Explore the big questions ↗</a>
+              <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3 text-sm font-bold text-teal-800">
+                <Link href="/lab/hz" className="underline underline-offset-4 hover:text-teal-950">Explore the Habitable Zone →</Link>
+                <a href="https://science.nasa.gov/exoplanets/big-questions/" target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-teal-950">Explore the big questions ↗</a>
+              </div>
             </div>
           </article>
         </div>
