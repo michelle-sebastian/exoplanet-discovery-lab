@@ -61,7 +61,7 @@ export default function AboutPage() {
             <h3 className="mt-3 text-lg font-semibold leading-7">2026 National Young Astronomer Award finalist</h3>
             <p className="mt-3 text-sm leading-6 text-slate-700">I was named a finalist for the Astronomical League&apos;s National Young Astronomer Award (NYAA).</p>
             <a href="https://skyandtelescope.org/astronomy-news/california-teen-wins-2026-national-young-astronomer-award/" target="_blank" rel="noopener noreferrer" className={`mt-4 inline-block text-sm ${linkStyle}`}>Read the award coverage ↗</a>
-            <a href="/awards/sky-and-telescope-2026-nyaa-article.pdf" target="_blank" rel="noopener noreferrer" className={`mt-2 block text-xs ${linkStyle}`}>View PDF version of the article ↗</a>
+            <a href="/awards/sky-and-telescope-2026-nyaa-article.pdf" target="_blank" rel="noopener noreferrer" className="mt-1.5 block w-fit text-[11px] leading-4 text-teal-800 underline underline-offset-2 hover:text-teal-950">PDF version</a>
           </article>
         </div>
       </section>
