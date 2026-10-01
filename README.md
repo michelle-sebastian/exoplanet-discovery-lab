@@ -36,3 +36,9 @@ To refresh the planet catalog manually on your computer, run `python3 data-scrip
 ## Security and maintenance
 
 The public app has no user accounts, database, NASA credentials, or write API. The deployed NASA measurements are public data. Keep any future secrets in Vercel environment variables or GitHub Actions secrets, never in source files or variables prefixed `NEXT_PUBLIC_`. Limit GitHub collaborators and workflow permissions, enable Dependabot alerts and security updates, and review the [weekly dependency update pull requests](.github/dependabot.yml) before deploying them. The data-refresh workflow uses the repository's scoped `GITHUB_TOKEN`; it needs no personal access token. Review failed workflows and deployment logs rather than assuming a scheduled refresh always succeeded.
+
+## Visitor analytics and educational use
+
+The app includes Vercel Web Analytics. Enable **Web Analytics** for the project in the Vercel dashboard, then deploy the site. In the project's **Analytics** view, select **Production** and filter by hostname if you want to report traffic for the custom domain separately from the `vercel.app` address. Record the reporting dates and whether a number means page views or daily unique visitors. The free Hobby reporting window is limited, so save dated summaries regularly if you need longer-term totals.
+
+Analytics cannot verify how many visitors are students or how many classrooms used the site. For a statement such as “used by X students in Y classrooms,” collect optional reports from teachers with a clearly defined date range and count unique classroom submissions and their reported student totals. Keep those educator-reported numbers separate from anonymous site traffic. The site's original educational writing and activities are marked CC BY 4.0 at `/license`; third-party material and software code are excluded.

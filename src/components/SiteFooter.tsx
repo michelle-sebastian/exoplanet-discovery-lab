@@ -8,6 +8,8 @@ export default function SiteFooter() {
         <Link href="/about">About</Link>
         <Link href="/glossary#further-reading">NASA resources</Link>
         <Link href="/#credits-heading">Data &amp; image credits</Link>
+        <Link href="/license">Content license</Link>
+        <Link href="/privacy">Privacy</Link>
       </nav>
     </div>
   </footer>;
