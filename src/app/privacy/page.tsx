@@ -17,7 +17,7 @@ export default function PrivacyPage() {
       <p>The site does not ask students to create accounts. Visitor statistics cannot tell us whether someone is a student or whether a classroom used the site.</p>
       <h2 className="text-xl font-semibold text-slate-900">Optional feedback survey</h2>
       <p>The feedback page embeds a Google Form. We ask which pages people explored, how useful and clear they found the site, and, optionally, their broad role, country or region, and comments. No question is required. We do not ask for names, email addresses, school names, exact ages, or IP addresses. Please do not include personal details in comments.</p>
-      <p>Responses are stored in Michelle Sebastian&apos;s Google Form and linked private spreadsheet so she can review feedback and report aggregated results. The site does not publish individual responses. Google processes form visits and submissions under its <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-800 underline underline-offset-4">Privacy Policy</a>. If you prefer, you can skip the survey entirely.</p>
+      <p>Responses are stored in the site author&apos;s Google Forms so she can review feedback, analyze aggregated results, and make site improvements. Responses are also saved in a linked private spreadsheet. The site does not publish individual responses. Google processes form visits and submissions under its <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-800 underline underline-offset-4">Privacy Policy</a>. If you prefer, you can skip the survey entirely.</p>
     </section>
   </main>;
 }
