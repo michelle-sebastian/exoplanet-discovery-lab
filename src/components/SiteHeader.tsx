@@ -25,6 +25,10 @@ export default function SiteHeader() {
           Exoplanet <span className="text-teal-700">Explorer</span>
         </Link>
 
+        <Link href="/feedback" aria-current={pathname === "/feedback" ? "page" : undefined} className="site-feedback-link">
+          Share feedback
+        </Link>
+
         <nav aria-label="Main navigation" className="site-desktop-nav">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined} className={`site-nav-link ${pathname === item.href ? "text-teal-800" : ""}`}>
