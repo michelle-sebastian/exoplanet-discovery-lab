@@ -17,12 +17,12 @@ export default function FeedbackPage() {
 
     <section className="lab-panel overflow-hidden" aria-label="Exoplanet Explorer feedback survey">
       <div className="border-b border-slate-200 bg-teal-50 px-5 py-4 text-sm leading-6 text-slate-700">
-        You can skip any question, and no Google account is required. Please leave out names, email addresses, school names, and other personal details. Responses go to a Google Form reviewed by the site creator. <a href="/privacy" className="font-semibold text-teal-800 underline underline-offset-4">Privacy details</a>
+        You can skip any question, and no Google account is required. If Google shows your signed-in email address, it is not collected or included in your response. Please leave out names, email addresses, school names, and other personal details. Responses go to a Google Form reviewed by the site creator. <a href="/privacy" className="font-semibold text-teal-800 underline underline-offset-4">Privacy details</a>
       </div>
       <iframe
         title="Exoplanet Explorer feedback form"
         src={`${formUrl}?embedded=true`}
-        className="block h-[1550px] w-full border-0 sm:h-[1300px]"
+        className="block h-[1750px] w-full border-0 sm:h-[1500px]"
         loading="lazy"
       />
     </section>
