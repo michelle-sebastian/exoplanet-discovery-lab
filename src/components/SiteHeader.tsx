@@ -25,7 +25,7 @@ export default function SiteHeader() {
           Exoplanet <span className="text-teal-700">Explorer</span>
         </Link>
 
-        <Link href="/feedback" aria-current={pathname === "/feedback" ? "page" : undefined} className="site-feedback-link">
+        <Link href="/feedback" aria-current={pathname === "/feedback" ? "page" : undefined} className="ml-auto inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-full border border-teal-700 bg-teal-700 px-4 py-2 text-sm font-bold text-white hover:bg-teal-800 max-[480px]:order-3 max-[480px]:basis-full">
           Share feedback
         </Link>
 
@@ -42,7 +42,7 @@ export default function SiteHeader() {
           aria-expanded={menuOpen}
           aria-controls="mobile-site-nav"
           onClick={() => setMenuOpen((open) => !open)}
-          className="site-menu-button"
+          className="site-menu-button max-[480px]:ml-auto"
         >
           <span aria-hidden="true" className="flex w-4 flex-col gap-1">
             <span className="h-0.5 w-4 bg-current" />
