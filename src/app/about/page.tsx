@@ -64,7 +64,7 @@ export default function AboutPage() {
               <a href="https://arxiv.org/abs/2610.23876" target="_blank" rel="noopener noreferrer" className={`mt-4 inline-block text-sm ${linkStyle}`}>Read the follow-up preprint on arXiv ↗</a>
             </article>
           </div>
-          <article className="lab-panel p-6" style={{ backgroundColor: "#f7fbf8", border: "1.5px solid #9fb9ad" }}>
+          <article className="lab-panel self-start p-6" style={{ backgroundColor: "#f7fbf8", border: "1.5px solid #9fb9ad" }}>
             <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">Recognition</p>
             <h3 className="mt-3 text-lg font-semibold leading-7">2026 National Young Astronomer Award finalist</h3>
             <p className="mt-3 text-sm leading-6 text-slate-700">I was named a finalist for the Astronomical League&apos;s National Young Astronomer Award (NYAA).</p>
