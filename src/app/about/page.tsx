@@ -50,12 +50,20 @@ export default function AboutPage() {
         <h2 id="research-heading" className="mt-2 text-2xl font-semibold">My research on star clusters</h2>
         <p className="mt-3 leading-7 text-slate-700">What determines the size of a star cluster? My research examines how cluster mass, age, and the star-forming activity of the host galaxy relate to cluster radius. It has been an opportunity to test ideas against observations and learn from results that challenge an initial hypothesis.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-[1.5fr_1fr]">
-          <article className="lab-panel p-6">
-            <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">Research preprint · arXiv</p>
-            <h3 className="mt-3 text-lg font-semibold leading-7">Influence of star cluster mass, age, and galaxy star formation rate on star cluster radii</h3>
-            <p className="mt-3 text-sm leading-6 text-slate-700">Using 5,105 star clusters from the LEGUS survey, I compared predictions based on cluster mass alone with predictions that also considered a cluster&apos;s age and how actively its galaxy forms stars. Adding those factors did not make the size predictions more accurate, and much of the variation in cluster size remained unexplained.</p>
-            <a href="https://arxiv.org/abs/2602.00445" target="_blank" rel="noopener noreferrer" className={`mt-4 inline-block text-sm ${linkStyle}`}>Read the preprint on arXiv ↗</a>
-          </article>
+          <div className="grid gap-6">
+            <article className="lab-panel p-6">
+              <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">Research preprint · arXiv</p>
+              <h3 className="mt-3 text-lg font-semibold leading-7">Influence of star cluster mass, age, and galaxy star formation rate on star cluster radii</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-700">Using 5,105 star clusters from the LEGUS survey, I compared predictions based on cluster mass alone with predictions that also considered a cluster&apos;s age and how actively its galaxy forms stars. Adding those factors did not make the size predictions more accurate, and much of the variation in cluster size remained unexplained.</p>
+              <a href="https://arxiv.org/abs/2602.00445" target="_blank" rel="noopener noreferrer" className={`mt-4 inline-block text-sm ${linkStyle}`}>Read the preprint on arXiv ↗</a>
+            </article>
+            <article className="lab-panel p-6">
+              <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">Follow-up preprint · arXiv</p>
+              <h3 className="mt-3 text-lg font-semibold leading-7">The Local Star Formation Environment Predicts Young Star Cluster Radii: Evidence from PHANGS-MUSE H-alpha Maps</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-700">I then examined star-forming activity close to individual young clusters. Among 325 clusters, this local measure helped explain their radii, while the galaxy-wide measure did not show the same relationship.</p>
+              <a href="https://arxiv.org/abs/2610.23876" target="_blank" rel="noopener noreferrer" className={`mt-4 inline-block text-sm ${linkStyle}`}>Read the follow-up preprint on arXiv ↗</a>
+            </article>
+          </div>
           <article className="lab-panel p-6" style={{ backgroundColor: "#f7fbf8", border: "1.5px solid #9fb9ad" }}>
             <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">Recognition</p>
             <h3 className="mt-3 text-lg font-semibold leading-7">2026 National Young Astronomer Award finalist</h3>
